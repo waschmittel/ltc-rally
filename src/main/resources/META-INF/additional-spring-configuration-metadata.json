@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "de.flubba.rally.shekel-euro-rate",
+    "type": "java.lang.String",
+    "description": "exchange rate from shekels to euros"
+  },
+  {
+    "name": "de.flubba.rally.min-lap-duration",
+    "type": "java.lang.String",
+    "description": "minimum lap duration in seconds"
+  }
+]}

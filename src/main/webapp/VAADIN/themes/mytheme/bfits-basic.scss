@@ -1,0 +1,110 @@
+$v-layout-margin-top: $v-font-size !default;
+$v-layout-margin-bottom: $v-layout-margin-top;
+$v-layout-margin-left: $v-layout-margin-top;
+$v-layout-margin-right: $v-layout-margin-top;
+
+$v-background-color: #fff;
+$v-panel-background-color: #fff;
+
+$v-focus-style: 0 0 1px 1px rgba($v-focus-color, .5);
+$v-border-radius: 3px;
+$v-textfield-border-radius: 0;
+$v-font-family: "Source Sans Pro", Helvetica, Arial, 'lucida grande', tahoma, verdana, arial, sans-serif;
+$v-font-size: 15px;
+$v-font-weight: 400;
+$v-link-text-decoration: none;
+$v-shadow: 0 1px 0 (v-shade 0.2);
+$v-unit-size: 34px;
+$v-gradient: v-linear 12%;
+$v-overlay-shadow: 0 3px 8px v-shade, 0 0 0 1px (v-shade 0.7);
+$v-shadow-opacity: 20%;
+$v-selection-overlay-padding-horizontal: 0;
+$v-selection-overlay-padding-vertical: 6px;
+$v-selection-item-border-radius: 0;
+
+$notification-warning-color: orange;
+$notification-information-color: #66f;
+$notification-error-color: #f9f0ef;
+$notification-success-color: #2c9720;
+
+$v-grid-cell-focused-border: none;
+$v-grid-row-height: 40px;
+
+@mixin bfits-basic {
+	/* NOTIFICATION WARNING */
+	.v-Notification.warning {
+	 	background: #fff;
+	 	color: #555;
+	 	border: 2px solid $notification-warning-color;
+	}
+	.v-Notification.warning .v-Notification-caption {
+	 	color: $notification-warning-color;
+	}
+	.v-Notification.warning .v-Notification-caption:before {
+		 font-family: "Vaadin-Icons";
+		 content: "\e748";
+		 margin-right: 0.5em;
+	}
+	.v-Notification.warning.bar {
+	 	margin: -2px !important;
+	}
+	/* WARNING SYSTEM STYLE */
+	.v-Notification.warning.system {
+		background-color: $notification-warning-color !important;
+	 	color: #fff !important;
+	}
+	.v-Notification.warning.system .v-Notification-caption:before {
+		color: #fff;
+		margin-right: 0.5em;
+	}
+	.v-Notification.warning.system .v-Notification-caption {
+	 	color: #fff !important;
+	}
+	.v-Notification.warning.system .v-Notification-description {
+	 	color: #fff !important;
+	}	
+	
+	/* NOTIFICATION INFORMATION */
+	.v-Notification.information {
+	 	background: #fff;
+	 	color: #555;
+	 	border: 2px solid $notification-information-color;
+	}
+	.v-Notification.information .v-Notification-caption {
+	 	color: $notification-information-color;
+	}	
+	.v-Notification.information .v-Notification-caption:before {
+		 font-family: "Vaadin-Icons";
+		 content: "\e71e";
+		 margin-right: 0.5em;
+	}
+	.v-Notification.information.bar {
+	 	margin: -2px !important;
+	}
+	
+	/* NOTIFICATION ERROR */
+	.v-Notification.error {
+	 	color: #555;
+	}
+	.v-Notification.error .v-Notification-caption:before {
+		 font-family: "Vaadin-Icons";
+		 content: "\e707";
+		 margin-right: 0.5em;
+	}
+	.v-Notification.error.bar {
+	 	margin: -2px !important;
+	}
+	
+	/* SUCCESS SYSTEM STYLE */
+	.v-Notification.success.system {
+		background-color: $notification-success-color !important;
+	 	color: #fff !important;
+	}
+	.v-Notification.success.system .v-Notification-caption:before {
+		color: #fff;
+		margin-right: 0.5em;
+	}
+	.v-Notification.success.system .v-Notification-caption {
+	 	color: #fff !important;
+	}	
+}

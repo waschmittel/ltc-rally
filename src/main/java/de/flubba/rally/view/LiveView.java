@@ -1,5 +1,7 @@
 package de.flubba.rally.view;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.LinkedList;
 
 import com.vaadin.navigator.View;
@@ -7,7 +9,6 @@ import com.vaadin.navigator.ViewBeforeLeaveEvent;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.UI;
 
 import de.flubba.rally.LapBroadcaster;
 import de.flubba.rally.LapBroadcaster.LapBroadcastListener;
@@ -20,7 +21,8 @@ public class LiveView extends LiveViewDesign implements View, LapBroadcastListen
 
     public void addRunner(String name) {
         Label newLabel = new Label(name);
-        if (recent.size() >= 5) {
+        newLabel.addStyleName("liveLap");
+        if (recent.size() >= 10) {
             removeComponent(recent.pop());
         }
         addComponent(newLabel);
@@ -40,8 +42,9 @@ public class LiveView extends LiveViewDesign implements View, LapBroadcastListen
 
     @Override
     public void receiveBroadcast(Runner runner, long lapTime) {
-        UI.getCurrent().access(() -> {
-            addRunner(String.format("%s - %s - %s", runner.getId(), lapTime, runner.getName()));
+        getUI().access(() -> {
+            BigDecimal seconds = new BigDecimal(lapTime).divide(new BigDecimal(1000)).setScale(1, RoundingMode.HALF_UP);
+            addRunner(String.format("%ss - %s - %s", seconds.toString(), runner.getId(), runner.getName()));
         });
     }
 

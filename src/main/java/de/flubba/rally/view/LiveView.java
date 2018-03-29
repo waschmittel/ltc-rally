@@ -13,7 +13,7 @@ import de.flubba.rally.LapBroadcaster;
 import de.flubba.rally.LapBroadcaster.LapBroadcastListener;
 import de.flubba.rally.entity.Runner;
 
-@SpringView(name = RunnerView.VIEW_NAME)
+@SpringView(name = LiveView.VIEW_NAME)
 public class LiveView extends LiveViewDesign implements View, LapBroadcastListener {
     public static final String VIEW_NAME = "live";
     private LinkedList<Label>  recent    = new LinkedList<>();

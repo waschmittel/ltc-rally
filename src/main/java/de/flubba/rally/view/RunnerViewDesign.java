@@ -2,6 +2,8 @@ package de.flubba.rally.view;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -13,7 +15,7 @@ import com.vaadin.ui.VerticalSplitPanel;
 import com.vaadin.ui.themes.ValoTheme;
 
 import de.flubba.generated.i18n.I18n;
-import de.flubba.rally.entity.Runner;
+import de.flubba.rally.component.RunnersGrid;
 import de.flubba.rally.entity.Sponsor;
 
 abstract class RunnerViewDesign extends VerticalSplitPanel {
@@ -23,10 +25,12 @@ abstract class RunnerViewDesign extends VerticalSplitPanel {
     private VerticalLayout runnersLayout  = new VerticalLayout();
     private VerticalLayout sponsorsLayout = new VerticalLayout();
 
-    Grid<Runner>  runnersGrid  = new Grid<>(Runner.class);
+    @Autowired
+    RunnersGrid   runnersGrid;
     Grid<Sponsor> sponsorsGrid = new Grid<>(Sponsor.class);
 
     Button addRunnerButton  = new Button(I18n.RUNNER_BUTTON_ADD.get(), VaadinIcons.PLUS);
+    Button refreshButton    = new Button(I18n.RUNNER_BUTTON_REFRESH.get(), VaadinIcons.REFRESH);
     Button addSponsorButton = new Button(I18n.SPONSOR_BUTTON_ADD.get(), VaadinIcons.PLUS);
 
     @PostConstruct
@@ -48,23 +52,17 @@ abstract class RunnerViewDesign extends VerticalSplitPanel {
     }
 
     private void initRunnersToolbar() {
-        runnersToolbar.setWidth("100%");
-        runnersToolbar.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+        runnersToolbar.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
         addRunnerButton.addStyleName(ValoTheme.BUTTON_FRIENDLY);
 
-        runnersToolbar.addComponent(addRunnerButton);
+        runnersToolbar.addComponents(addRunnerButton, refreshButton);
     }
 
     private void initRunnersGrid() {
-        runnersGrid.setSizeFull();
-        runnersGrid.removeColumn("numberOfSponsors");
-        runnersGrid.removeColumn("laps");
-        runnersGrid.removeColumn("lapCount");
-        runnersGrid.removeColumn("average");
+        runnersGrid.removeColumn("bonusLaps");
         runnersGrid.removeColumn("donations");
-        runnersGrid.removeColumn("sponsors");
-        runnersGrid.setColumnOrder("id", "name", "gender");
-        runnersGrid.setSelectionMode(SelectionMode.SINGLE);
+        runnersGrid.removeColumn("numberOfSponsors");
+        runnersGrid.removeColumn("average");
     }
 
     private void initSponsorsLayout() {
@@ -76,8 +74,7 @@ abstract class RunnerViewDesign extends VerticalSplitPanel {
     }
 
     private void initSponsorsToolbar() {
-        sponsorsToolbar.setWidth("100%");
-        sponsorsToolbar.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+        sponsorsToolbar.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
         addSponsorButton.addStyleName(ValoTheme.BUTTON_FRIENDLY);
 
         sponsorsToolbar.addComponent(addSponsorButton);
@@ -88,7 +85,14 @@ abstract class RunnerViewDesign extends VerticalSplitPanel {
         sponsorsGrid.setSizeFull();
         sponsorsGrid.removeColumn("runner");
         sponsorsGrid.removeColumn("id");
-        sponsorsGrid.setColumnOrder("name", "street", "city", "country", "perLapDonation", "oneTimeDonation", "receipt");
+        sponsorsGrid.removeColumn("totalDonation");
+        sponsorsGrid.getColumn("name").setResizable(false).setExpandRatio(1);
+        sponsorsGrid.getColumn("street").setResizable(false).setExpandRatio(1);
+        sponsorsGrid.getColumn("city").setResizable(false).setExpandRatio(1);
+        sponsorsGrid.getColumn("country").setResizable(false).setExpandRatio(1);
+        sponsorsGrid.getColumn("perLapDonation").setResizable(false).setWidth(100);
+        sponsorsGrid.getColumn("oneTimeDonation").setResizable(false).setWidth(100);
+        sponsorsGrid.setColumnOrder("name", "street", "city", "country", "perLapDonation", "oneTimeDonation");
         sponsorsGrid.setSelectionMode(SelectionMode.NONE);
     }
 

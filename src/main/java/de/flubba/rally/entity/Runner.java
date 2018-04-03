@@ -33,8 +33,7 @@ public class Runner {
     @Column(length = 20)
     @Size(min = 1, max = 20, message = "{runner.room.length}")
     private String     roomNumber;
-    private long       lapCount;
-    private double     average;
+    private BigDecimal average;
     private BigDecimal donations;
 
     @NotNull(message = "{runner.gender.required}")
@@ -45,9 +44,12 @@ public class Runner {
 
     @OneToMany(mappedBy = "runner", orphanRemoval = true)
     List<Sponsor> sponsors;
-    private long  numberOfSponsors;
 
-    public double getAverage() {
+    private Integer numberOfSponsors;
+    private Integer numberOfLapsRun;
+    private Long    bonusLaps;
+
+    public BigDecimal getAverage() {
         return average;
     }
 
@@ -63,10 +65,6 @@ public class Runner {
         return id;
     }
 
-    public long getLapCount() {
-        return lapCount;
-    }
-
     public List<Lap> getLaps() {
         return laps;
     }
@@ -75,7 +73,7 @@ public class Runner {
         return name;
     }
 
-    public long getNumberOfSponsors() {
+    public Integer getNumberOfSponsors() {
         return numberOfSponsors;
     }
 
@@ -87,7 +85,7 @@ public class Runner {
         return sponsors;
     }
 
-    public void setAverage(double average) {
+    public void setAverage(BigDecimal average) {
         this.average = average;
     }
 
@@ -99,10 +97,6 @@ public class Runner {
         this.gender = gender;
     }
 
-    public void setLapCount(long lapCount) {
-        this.lapCount = lapCount;
-    }
-
     public void setLaps(List<Lap> laps) {
         this.laps = laps;
     }
@@ -111,7 +105,7 @@ public class Runner {
         this.name = name;
     }
 
-    public void setNumberOfSponsors(long numberOfSponsors) {
+    public void setNumberOfSponsors(Integer numberOfSponsors) {
         this.numberOfSponsors = numberOfSponsors;
     }
 
@@ -121,6 +115,22 @@ public class Runner {
 
     public void setSponsors(List<Sponsor> sponsors) {
         this.sponsors = sponsors;
+    }
+
+    public Integer getNumberOfLapsRun() {
+        return numberOfLapsRun;
+    }
+
+    public void setNumberOfLapsRun(Integer numberOfLapsRun) {
+        this.numberOfLapsRun = numberOfLapsRun;
+    }
+
+    public Long getBonusLaps() {
+        return bonusLaps;
+    }
+
+    public void setBonusLaps(Long bonusLaps) {
+        this.bonusLaps = bonusLaps;
     }
 
     @Override

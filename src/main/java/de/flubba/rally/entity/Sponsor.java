@@ -48,8 +48,7 @@ public class Sponsor {
     @Column(precision = 8, scale = 2)
     private BigDecimal perLapDonation;
 
-    @NotNull(message = "{sponsor.field.required}")
-    private boolean receipt;
+    private BigDecimal totalDonation;
 
     @ManyToOne
     private Runner runner;
@@ -86,10 +85,6 @@ public class Sponsor {
         return street;
     }
 
-    public boolean isReceipt() {
-        return receipt;
-    }
-
     public void setCity(String city) {
         this.city = city;
     }
@@ -110,16 +105,20 @@ public class Sponsor {
         this.perLapDonation = perLapDonation;
     }
 
-    public void setReceipt(boolean receipt) {
-        this.receipt = receipt;
-    }
-
     public void setRunner(Runner runner) {
         this.runner = runner;
     }
 
     public void setStreet(String street) {
         this.street = street;
+    }
+
+    public BigDecimal getTotalDonation() {
+        return totalDonation;
+    }
+
+    public void setTotalDonation(BigDecimal totalDonation) {
+        this.totalDonation = totalDonation;
     }
 
     @Override

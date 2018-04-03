@@ -6,7 +6,6 @@ import java.math.RoundingMode;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
 import com.vaadin.server.ErrorMessage;
 import com.vaadin.shared.ui.ErrorLevel;
-import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
@@ -27,7 +26,6 @@ public class SponsorEditForm extends AbstractForm<Sponsor> {
     private TextField perLapShekels   = new TextField(I18n.SPONSOR_PERLAP_SHEKEL.get());
     private TextField oneTimeDonation = new TextField(I18n.SPONSOR_ONETIME.get());
     private TextField oneTimeShekels  = new TextField(I18n.SPONSOR_ONETIME_SHEKEL.get());
-    private CheckBox  receipt         = new CheckBox(I18n.SPONSOR_RECEIPT.get());
 
     public SponsorEditForm(Sponsor sponsor, BigDecimal shekelToEuro) {
         super(Sponsor.class);
@@ -71,10 +69,13 @@ public class SponsorEditForm extends AbstractForm<Sponsor> {
 
     @Override
     protected void bind() {
-        getBinder().forField(oneTimeDonation).withConverter(new StringToBigDecimalConverter("aaaaaaaaargh"))
+        getBinder().forField(oneTimeDonation)
+                   .withConverter(new StringToBigDecimalConverter(I18n.SPONSOR_INVALID_NUMBER.get()))
                    .withNullRepresentation(new BigDecimal(0)).bind("oneTimeDonation");
-        getBinder().forField(perLapDonation).withConverter(new StringToBigDecimalConverter("aaaaaaaaargh"))
-                   .withNullRepresentation(new BigDecimal(0)).bind("perLapDonation");
+        getBinder().forField(perLapDonation)
+                   .withConverter(new StringToBigDecimalConverter(I18n.SPONSOR_INVALID_NUMBER.get()))
+                   .withNullRepresentation(new BigDecimal(0))
+                   .bind("perLapDonation");
         super.bind();
     }
 
@@ -87,8 +88,7 @@ public class SponsorEditForm extends AbstractForm<Sponsor> {
                                                  perLapDonation,
                                                  perLapShekels,
                                                  oneTimeDonation,
-                                                 oneTimeShekels,
-                                                 receipt),
+                                                 oneTimeShekels),
                                   getToolbar());
     }
 }

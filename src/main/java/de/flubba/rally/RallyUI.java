@@ -21,13 +21,14 @@ import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.UI;
 
 import de.flubba.generated.i18n.I18n;
+import de.flubba.rally.view.ResultsView;
 import de.flubba.rally.view.LiveView;
 import de.flubba.rally.view.RunnerView;
 import de.flubba.rally.view.TagAssignmentsView;
 
 @Push
 @Theme("mytheme")
-@Widgetset("de.flubba.Widgetset")
+@Widgetset("AppWidgetset")
 @SpringUI
 @Viewport("width=device-width, initial-scale=1")
 public class RallyUI extends UI {
@@ -64,6 +65,7 @@ public class RallyUI extends UI {
         sideMenu.addNavigation(I18n.NAVIGATION_RUNNERS.get(), VaadinIcons.HANDS_UP, RunnerView.VIEW_NAME);
         sideMenu.addNavigation(I18n.NAVIGATION_TAGS.get(), VaadinIcons.AUTOMATION, TagAssignmentsView.VIEW_NAME);
         sideMenu.addNavigation(I18n.NAVIGATION_LIVE.get(), VaadinIcons.ROAD, LiveView.VIEW_NAME);
+        sideMenu.addNavigation(I18n.NAVIGATION_RESULTS.get(), VaadinIcons.TROPHY, ResultsView.VIEW_NAME);
     }
 
     @SpringViewDisplay

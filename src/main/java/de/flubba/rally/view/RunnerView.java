@@ -27,8 +27,6 @@ import de.flubba.util.vaadin.dialog.ConfirmDialog;
 public class RunnerView extends RunnerViewDesign implements View {
     public static final String VIEW_NAME = "";
 
-    private Runner selectedRunner = null;
-
     @Autowired
     private RunnerRepository runnerRepository;
 
@@ -40,36 +38,35 @@ public class RunnerView extends RunnerViewDesign implements View {
 
     @PostConstruct
     public void init() {
-        runnersGrid.addSelectionListener(event -> {
-            if (!event.getFirstSelectedItem().isPresent()) {
-                showNoSponsors();
-            }
-            event.getFirstSelectedItem().ifPresent(this::showSponsorsFor);
-        });
-
         addRunnerButton.addClickListener(event -> editRunner(new Runner()));
 
         addSponsorButton.addClickListener(event -> {
             Sponsor newSponsor = new Sponsor();
-            newSponsor.setRunner(selectedRunner);
+            System.out.println("runner for sponsor: " + runnersGrid.getSelectedRunner().getId());
+            newSponsor.setRunner(runnersGrid.getSelectedRunner());
             editSponsor(newSponsor);
         });
 
-        sponsorsGrid.addComponentColumn(new EditDeleteButtonsProvider<>(this::editSponsor, this::confirmDeleteSponsor));
-        runnersGrid.addComponentColumn(new EditDeleteButtonsProvider<>(this::editRunner));
+        sponsorsGrid.addComponentColumn(new EditDeleteButtonsProvider<>(this::editSponsor, this::confirmDeleteSponsor)).setResizable(false)
+                    .setWidth(120);
+        runnersGrid.addComponentColumn(new EditDeleteButtonsProvider<>(this::editRunner)).setResizable(false).setWidth(100);
 
-        updateRunnerGrid();
-    }
+        refreshButton.addClickListener(e -> runnersGrid.refresh());
 
-    private void showNoSponsors() {
-        addSponsorButton.setEnabled(false);
-        sponsorsGrid.setDataProvider(new ListDataProvider<>(new LinkedList<>()));
+        runnersGrid.addRunnerSelectionListener(this::showSponsorsFor);
     }
 
     private void showSponsorsFor(Runner runner) {
-        selectedRunner = runner;
-        addSponsorButton.setEnabled(true);
-        sponsorsGrid.setDataProvider(new ListDataProvider<>(sponsorRepository.findAllByRunner(runner)));
+        if (runner == null) {
+            addSponsorButton.setEnabled(false);
+            addSponsorButton.setCaption(I18n.SPONSOR_BUTTON_ADD.get());
+            sponsorsGrid.setDataProvider(new ListDataProvider<>(new LinkedList<>()));
+        }
+        else {
+            addSponsorButton.setEnabled(true);
+            addSponsorButton.setCaption(I18n.SPONSOR_BUTTON_NAMED_ADD.get(runner.getName()));
+            sponsorsGrid.setDataProvider(new ListDataProvider<>(sponsorRepository.findByRunner(runner)));
+        }
     }
 
     public void editRunner(Runner runner) {
@@ -77,22 +74,14 @@ public class RunnerView extends RunnerViewDesign implements View {
         runnerEditForm.openInModalPopup();
         runnerEditForm.setSavedHandler(entity -> saveRunner(runner));
         runnerEditForm.setResetHandler(editedServer -> {
-            updateRunnerGrid();
+            runnersGrid.refresh();
             RallyUI.closeWindows();
         });
     }
 
     private void saveRunner(Runner runner) {
-        selectedRunner = runnerRepository.saveAndFlush(runner);
-        updateRunnerGrid();
+        runnersGrid.selectRunner(runnerRepository.saveAndFlush(runner));
         RallyUI.closeWindows();
-    }
-
-    private void updateRunnerGrid() {
-        runnersGrid.setDataProvider(new ListDataProvider<>(runnerRepository.findAll()));
-        if (selectedRunner != null) {
-            runnersGrid.select(selectedRunner);
-        }
     }
 
     private void confirmDeleteSponsor(Sponsor sponsor) {

@@ -25,7 +25,7 @@ public class LiveView extends LiveViewDesign implements View, LapBroadcastListen
         if (recent.size() >= 10) {
             removeComponent(recent.pop());
         }
-        addComponent(newLabel);
+        addComponentAsFirst(newLabel);
         recent.add(newLabel);
     }
 

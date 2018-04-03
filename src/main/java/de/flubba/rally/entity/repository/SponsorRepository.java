@@ -10,5 +10,5 @@ import de.flubba.rally.entity.Sponsor;
 public interface SponsorRepository extends JpaRepository<Sponsor, Long> {
     long countByRunner(Runner runner);
 
-    List<Sponsor> findAllByRunner(Runner runner);
+    List<Sponsor> findByRunner(Runner runner);
 }

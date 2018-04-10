@@ -1,4 +1,4 @@
-# LTC Rally 
+# LTC Sponsor Rally 
 
 A tool for managing sponsor rallys.
 

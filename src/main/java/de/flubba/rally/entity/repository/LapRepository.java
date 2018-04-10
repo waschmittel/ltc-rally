@@ -9,7 +9,7 @@ import de.flubba.rally.entity.Lap;
 import de.flubba.rally.entity.Runner;
 
 public interface LapRepository extends JpaRepository<Lap, Long> {
-    @Query("select l from Lap l where l.time in (select max(laps.time) from Lap laps where laps.runner = ?1)")
+    @Query("select l from Lap l where l.runner = ?1 and l.time in (select max(laps.time) from Lap laps where laps.runner = ?1)")
     Lap findLastLap(Runner runner);
 
     List<Lap> findByRunner(Runner runner);

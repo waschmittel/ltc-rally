@@ -53,34 +53,34 @@ public class TagController {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
     }
 
-    public static final class LapTooShortException extends Exception {
+    private static final class LapTooShortException extends Exception {
         private LapTooShortException(long minimumLapDuration, long duration) {
             super(String.format("Lap too short! Was only %s seconds. Minimum lap duration is %s seconds.", duration, minimumLapDuration));
         }
     }
 
-    public static final class NoRunnerFoundException extends Exception {
+    private static final class NoRunnerFoundException extends Exception {
         private NoRunnerFoundException(TagAssignment tagAssignment) {
             super(String.format("No runner with id %s found for counting laps.", tagAssignment.getRunnerId()));
             log.debug("No runner with id {} found for counting laps.", tagAssignment.getTagId());
         }
     }
 
-    public static final class TagAlreadyAssignedException extends Exception {
+    private static final class TagAlreadyAssignedException extends Exception {
         private TagAlreadyAssignedException(TagAssignment tagAssignment) {
             super(String.format("Tag %s is already assigned to runner %s.", tagAssignment.getTagId(), tagAssignment.getRunnerId()));
             log.debug("Tag {} not assigned because it is already assigned.", tagAssignment.getTagId());
         }
     }
 
-    public static final class RunnerAlreadyAssignedException extends Exception {
+    private static final class RunnerAlreadyAssignedException extends Exception {
         private RunnerAlreadyAssignedException(TagAssignment tagAssignment) {
             super(String.format("Runner %s is already assigned to tag %s.", tagAssignment.getRunnerId(), tagAssignment.getTagId()));
             log.debug("Runner {} not assigned because it is already assigned.", tagAssignment.getRunnerId());
         }
     }
 
-    public static final class TagNotFoundException extends Exception {
+    private static final class TagNotFoundException extends Exception {
         private TagNotFoundException(String tagId) {
             super(String.format("Tag %s is not registered.", tagId));
         }
@@ -97,10 +97,7 @@ public class TagController {
     }
 
     private static RunnerDto createRunnerDto(Runner runner) {
-        RunnerDto runnerDto = new RunnerDto();
-        runnerDto.id = runner.getId();
-        runnerDto.name = runner.getName();
-        return runnerDto;
+        return new RunnerDto(runner.getId(), runner.getName());
     }
 
     private void saveNewLap(Runner runner, long duration) {

@@ -9,7 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.TableGenerator;
+import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -20,8 +20,8 @@ public class Runner {
     }
 
     @Id
-    @TableGenerator(name = "RUNNER", allocationSize = 1, initialValue = 1)
-    @GeneratedValue(generator = "RUNNER", strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name="RUNNER", allocationSize = 1)
+    @GeneratedValue(generator = "RUNNER", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @NotNull(message = "{runner.name.required}")
@@ -43,7 +43,7 @@ public class Runner {
     private List<Lap> laps;
 
     @OneToMany(mappedBy = "runner", orphanRemoval = true)
-    List<Sponsor> sponsors;
+    private List<Sponsor> sponsors;
 
     private Integer numberOfSponsors;
     private Integer numberOfLapsRun;

@@ -1,17 +1,8 @@
 package de.flubba.rally.view;
 
-import java.math.BigDecimal;
-import java.util.LinkedList;
-
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
-
 import de.flubba.generated.i18n.I18n;
 import de.flubba.rally.RallyUI;
 import de.flubba.rally.component.RunnerEditForm;
@@ -22,6 +13,13 @@ import de.flubba.rally.entity.repository.RunnerRepository;
 import de.flubba.rally.entity.repository.SponsorRepository;
 import de.flubba.util.vaadin.EditDeleteButtonsProvider;
 import de.flubba.util.vaadin.dialog.ConfirmDialog;
+import org.apache.commons.text.WordUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+
+import javax.annotation.PostConstruct;
+import java.math.BigDecimal;
+import java.util.LinkedList;
 
 @SpringView(name = RunnerView.VIEW_NAME)
 public class RunnerView extends RunnerViewDesign implements View {
@@ -48,7 +46,7 @@ public class RunnerView extends RunnerViewDesign implements View {
         });
 
         sponsorsGrid.addComponentColumn(new EditDeleteButtonsProvider<>(this::editSponsor, this::confirmDeleteSponsor)).setResizable(false)
-                    .setWidth(120);
+                .setWidth(120);
         runnersGrid.addComponentColumn(new EditDeleteButtonsProvider<>(this::editRunner)).setResizable(false).setWidth(100);
 
         refreshButton.addClickListener(e -> runnersGrid.refresh());
@@ -61,15 +59,14 @@ public class RunnerView extends RunnerViewDesign implements View {
             addSponsorButton.setEnabled(false);
             addSponsorButton.setCaption(I18n.SPONSOR_BUTTON_ADD.get());
             sponsorsGrid.setDataProvider(new ListDataProvider<>(new LinkedList<>()));
-        }
-        else {
+        } else {
             addSponsorButton.setEnabled(true);
             addSponsorButton.setCaption(I18n.SPONSOR_BUTTON_NAMED_ADD.get(runner.getName()));
             sponsorsGrid.setDataProvider(new ListDataProvider<>(sponsorRepository.findByRunner(runner)));
         }
     }
 
-    public void editRunner(Runner runner) {
+    private void editRunner(Runner runner) {
         RunnerEditForm runnerEditForm = new RunnerEditForm(runner);
         runnerEditForm.openInModalPopup();
         runnerEditForm.setSavedHandler(entity -> saveRunner(runner));
@@ -80,15 +77,16 @@ public class RunnerView extends RunnerViewDesign implements View {
     }
 
     private void saveRunner(Runner runner) {
+        runner.setName(WordUtils.capitalizeFully(runner.getName()));
         runnersGrid.selectRunner(runnerRepository.saveAndFlush(runner));
         RallyUI.closeWindows();
     }
 
     private void confirmDeleteSponsor(Sponsor sponsor) {
         new ConfirmDialog(I18n.SPONSOR_DELETE_QUESTION.get(sponsor.getName()),
-                          I18n.SPONSOR_DELETE_CONFIRM.get(),
-                          I18n.SPONSOR_DELETE_CANCEL.get(),
-                          () -> deleteSponsor(sponsor));
+                I18n.SPONSOR_DELETE_CONFIRM.get(),
+                I18n.SPONSOR_DELETE_CANCEL.get(),
+                () -> deleteSponsor(sponsor));
     }
 
     private void deleteSponsor(Sponsor sponsor) {

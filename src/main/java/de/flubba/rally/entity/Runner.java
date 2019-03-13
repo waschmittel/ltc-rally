@@ -22,8 +22,8 @@ public class Runner {
     }
 
     @Id
-    @SequenceGenerator(name = "RUNNER", allocationSize = 1)
-    @GeneratedValue(generator = "RUNNER", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "RUNNER_ID", allocationSize = 1)
+    @GeneratedValue(generator = "RUNNER_ID", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @NotNull(message = "{runner.name.required}")

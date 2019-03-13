@@ -11,4 +11,6 @@ public interface RunnerRepository extends JpaRepository<Runner, Long> {
     Long countByName(String name);
 
     List<Runner> findByNameIgnoreCaseContaining(String name);
+
+    List<Runner> findByNameIgnoreCaseContainingAndGenderIs(String name, Runner.Gender gender);
 }

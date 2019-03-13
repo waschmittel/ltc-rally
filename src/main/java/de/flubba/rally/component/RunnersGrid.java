@@ -3,6 +3,7 @@ package de.flubba.rally.component;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.components.grid.HeaderRow;
@@ -11,6 +12,7 @@ import de.flubba.rally.entity.repository.RunnerRepository;
 import org.vaadin.addons.ResetButtonForTextField;
 
 import javax.annotation.PostConstruct;
+import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,6 +24,7 @@ public class RunnersGrid extends Grid<Runner> {
     }
 
     private final TextField runnersFilter = new TextField();
+    private final ComboBox<Runner.Gender> genderFilter = new ComboBox<>(null, EnumSet.allOf(Runner.Gender.class));
 
     private final RunnerRepository repository;
 
@@ -73,14 +76,25 @@ public class RunnersGrid extends Grid<Runner> {
 
     private void initHeaderRow() {
         HeaderRow runnersHeader = appendHeaderRow();
+
         runnersHeader.getCell("name").setComponent(runnersFilter);
         runnersFilter.setWidth("100%");
         ResetButtonForTextField.extend(runnersFilter);
         runnersFilter.addValueChangeListener(e -> refresh());
+
+        runnersHeader.getCell("gender").setComponent(genderFilter);
+        genderFilter.setWidth("100%");
+        genderFilter.setPopupWidth(null);
+        genderFilter.setEmptySelectionAllowed(true);
+        genderFilter.addValueChangeListener(e -> refresh());
     }
 
     public void refresh() {
-        setDataProvider(new ListDataProvider<>(repository.findByNameIgnoreCaseContaining(runnersFilter.getValue())));
+        if (genderFilter.getValue() != null) {
+            setDataProvider(new ListDataProvider<>(repository.findByNameIgnoreCaseContainingAndGenderIs(runnersFilter.getValue(), genderFilter.getValue())));
+        } else {
+            setDataProvider(new ListDataProvider<>(repository.findByNameIgnoreCaseContaining(runnersFilter.getValue())));
+        }
         if (selectedRunner != null) {
             select(selectedRunner);
         }
@@ -95,6 +109,7 @@ public class RunnersGrid extends Grid<Runner> {
         selectedRunner = runner;
         refresh();
         runnersFilter.setValue("");
+        genderFilter.setValue(null);
     }
 
     public void addRunnerSelectionListener(SelectionListener selectionListener) {

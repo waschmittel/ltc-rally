@@ -21,11 +21,11 @@ public class RunnersGrid extends Grid<Runner> {
         void onSelect(Runner runner);
     }
 
-    private TextField runnersFilter = new TextField();
+    private final TextField runnersFilter = new TextField();
 
     private final RunnerRepository repository;
 
-    private List<SelectionListener> selectionListeners = new LinkedList<>();
+    private final List<SelectionListener> selectionListeners = new LinkedList<>();
     private Runner selectedRunner = null;
 
     public RunnersGrid(RunnerRepository repository) {

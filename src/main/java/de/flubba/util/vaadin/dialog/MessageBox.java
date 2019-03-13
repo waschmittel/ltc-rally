@@ -1,8 +1,5 @@
 package de.flubba.util.vaadin.dialog;
 
-import java.text.MessageFormat;
-import java.util.HashMap;
-
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Alignment;
@@ -14,6 +11,9 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
+import java.text.MessageFormat;
+import java.util.HashMap;
+
 public class MessageBox {
     public enum ButtonId {
         // the order of definition in the enum represents the order in which the
@@ -24,7 +24,7 @@ public class MessageBox {
         CANCEL(null, null);
 
         private final VaadinIcons icon;
-        private final String      style;
+        private final String style;
 
         ButtonId(VaadinIcons icon, String style) {
             this.icon = icon;
@@ -50,14 +50,14 @@ public class MessageBox {
         }
     }
 
-    private static String ICON_CLASS  = "message-box-icon";
-    private static String LABEL_CLASS = "message-box-label";
+    private static final String ICON_CLASS = "message-box-icon";
+    private static final String LABEL_CLASS = "message-box-label";
 
-    private final HashMap<ButtonId, Button> buttons      = new HashMap<>();
-    private final HorizontalLayout          buttonLayout = new HorizontalLayout();
-    private final Label                     messageLabel = new Label();
-    private final Label                     iconLabel    = new Label();
-    private final Window                    window       = new Window();
+    private final HashMap<ButtonId, Button> buttons = new HashMap<>();
+    private final HorizontalLayout buttonLayout = new HorizontalLayout();
+    private final Label messageLabel = new Label();
+    private final Label iconLabel = new Label();
+    private final Window window = new Window();
 
     {
         iconLabel.setContentMode(ContentMode.HTML);
@@ -91,14 +91,10 @@ public class MessageBox {
      * create a message window that will close when any of the buttons is
      * clicked
      *
-     * @param messageType
-     *            type of message
-     * @param message
-     *            the message to show
-     * @param title
-     *            the title of the message window - may me null
-     * @param buttonIds
-     *            the types of buttons that should be displayed
+     * @param messageType type of message
+     * @param message the message to show
+     * @param title the title of the message window - may me null
+     * @param buttonIds the types of buttons that should be displayed
      */
     public MessageBox(MessageType messageType, String message, String title, ButtonId... buttonIds) {
         initButtons(buttonIds);
@@ -131,8 +127,8 @@ public class MessageBox {
     public Button getButton(ButtonId buttonId) {
         if (!buttons.containsKey(buttonId)) {
             throw new RuntimeException(MessageFormat
-                                                    .format("Button {0} war requested via getButton but not specified in constructor",
-                                                            buttonId));
+                    .format("Button {0} war requested via getButton but not specified in constructor",
+                            buttonId));
         }
         return buttons.get(buttonId);
     }

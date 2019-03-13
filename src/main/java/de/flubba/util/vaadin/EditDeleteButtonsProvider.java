@@ -6,16 +6,15 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-
 import de.flubba.util.vaadin.EditDeleteButtonsProvider.EntityButtons;
 
 public class EditDeleteButtonsProvider<E> implements ValueProvider<E, EntityButtons> {
     public static final double COLUMN_WIDTH = 130;
 
     private final DeleteButtonClickListener<E> deleteButtonClickListener;
-    private final EditButtonClickListener<E>   editButtonClickListener;
-    private final ShowEditButtonProvider<E>    showEditButtonProvider;
-    private final ShowDeleteButtonProvider<E>  showDeleteButtonProvider;
+    private final EditButtonClickListener<E> editButtonClickListener;
+    private final ShowEditButtonProvider<E> showEditButtonProvider;
+    private final ShowDeleteButtonProvider<E> showDeleteButtonProvider;
 
     public EditDeleteButtonsProvider(EditButtonClickListener<E> editButtonClickListener,
                                      DeleteButtonClickListener<E> deleteButtonClickListener,
@@ -31,21 +30,21 @@ public class EditDeleteButtonsProvider<E> implements ValueProvider<E, EntityButt
                                      DeleteButtonClickListener<E> deleteButtonClickListener) {
         this.editButtonClickListener = editButtonClickListener;
         this.deleteButtonClickListener = deleteButtonClickListener;
-        this.showEditButtonProvider = sourceEntity -> true;
-        this.showDeleteButtonProvider = sourceEntity -> true;
+        showEditButtonProvider = sourceEntity -> true;
+        showDeleteButtonProvider = sourceEntity -> true;
     }
 
     public EditDeleteButtonsProvider(EditButtonClickListener<E> editButtonClickListener) {
         this.editButtonClickListener = editButtonClickListener;
-        this.deleteButtonClickListener = null;
-        this.showEditButtonProvider = sourceEntity -> true;
-        this.showDeleteButtonProvider = sourceEntity -> false;
+        deleteButtonClickListener = null;
+        showEditButtonProvider = sourceEntity -> true;
+        showDeleteButtonProvider = sourceEntity -> false;
     }
 
     @Override
     public EntityButtons apply(E sourceEntity) {
         EntityButtons buttons = new EntityButtons(showEditButtonProvider.showEditButtonFor(sourceEntity),
-                                                  showDeleteButtonProvider.showDeleteButtonFor(sourceEntity));
+                showDeleteButtonProvider.showDeleteButtonFor(sourceEntity));
         buttons.editButton.addClickListener(event -> {
             editButtonClickListener.editButtonClick(sourceEntity);
         });
@@ -56,8 +55,8 @@ public class EditDeleteButtonsProvider<E> implements ValueProvider<E, EntityButt
     }
 
     static class EntityButtons extends HorizontalLayout {
-        private Button editButton   = new Button("", VaadinIcons.PENCIL);
-        private Button deleteButton = new Button("", VaadinIcons.TRASH);
+        private final Button editButton = new Button("", VaadinIcons.PENCIL);
+        private final Button deleteButton = new Button("", VaadinIcons.TRASH);
 
         EntityButtons(boolean withEditButton, boolean withDeleteButton) {
             setSpacing(false);

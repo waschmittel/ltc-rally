@@ -17,19 +17,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 
 abstract class RunnerViewDesign extends VerticalSplitPanel {
-    private HorizontalLayout runnersToolbar = new HorizontalLayout();
-    private HorizontalLayout sponsorsToolbar = new HorizontalLayout();
+    private final HorizontalLayout runnersToolbar = new HorizontalLayout();
+    private final HorizontalLayout sponsorsToolbar = new HorizontalLayout();
 
-    private VerticalLayout runnersLayout = new VerticalLayout();
-    private VerticalLayout sponsorsLayout = new VerticalLayout();
+    private final VerticalLayout runnersLayout = new VerticalLayout();
+    private final VerticalLayout sponsorsLayout = new VerticalLayout();
 
     @Autowired
     RunnersGrid runnersGrid;
-    Grid<Sponsor> sponsorsGrid = new Grid<>(Sponsor.class);
+    final Grid<Sponsor> sponsorsGrid = new Grid<>(Sponsor.class);
 
-    Button addRunnerButton = new Button(I18n.RUNNER_BUTTON_ADD.get(), VaadinIcons.PLUS);
-    Button refreshButton = new Button(I18n.RUNNER_BUTTON_REFRESH.get(), VaadinIcons.REFRESH);
-    Button addSponsorButton = new Button(I18n.SPONSOR_BUTTON_ADD.get(), VaadinIcons.PLUS);
+    final Button addRunnerButton = new Button(I18n.RUNNER_BUTTON_ADD.get(), VaadinIcons.PLUS);
+    final Button refreshButton = new Button(I18n.RUNNER_BUTTON_REFRESH.get(), VaadinIcons.REFRESH);
+    final Button addSponsorButton = new Button(I18n.SPONSOR_BUTTON_ADD.get(), VaadinIcons.PLUS);
 
     @PostConstruct
     private void init() {

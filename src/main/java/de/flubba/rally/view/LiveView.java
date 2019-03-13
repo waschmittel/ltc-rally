@@ -16,7 +16,7 @@ import java.util.LinkedList;
 @SpringView(name = LiveView.VIEW_NAME)
 public class LiveView extends LiveViewDesign implements View, LapBroadcastListener {
     public static final String VIEW_NAME = "live";
-    private LinkedList<Label> recent = new LinkedList<>();
+    private final LinkedList<Label> recent = new LinkedList<>();
 
     private void addRunner(String name) {
         Label newLabel = new Label(name);

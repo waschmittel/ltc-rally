@@ -14,7 +14,6 @@ import de.flubba.rally.entity.repository.SponsorRepository;
 import de.flubba.util.vaadin.EditDeleteButtonsProvider;
 import de.flubba.util.vaadin.dialog.ConfirmDialog;
 import org.apache.commons.text.WordUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.PostConstruct;
@@ -25,14 +24,17 @@ import java.util.LinkedList;
 public class RunnerView extends RunnerViewDesign implements View {
     public static final String VIEW_NAME = "";
 
-    @Autowired
-    private RunnerRepository runnerRepository;
+    private final RunnerRepository runnerRepository;
 
-    @Autowired
-    private SponsorRepository sponsorRepository;
+    private final SponsorRepository sponsorRepository;
 
     @Value("${de.flubba.rally.shekel-euro-rate}")
     private BigDecimal shekelToEuro;
+
+    public RunnerView(RunnerRepository runnerRepository, SponsorRepository sponsorRepository) {
+        this.runnerRepository = runnerRepository;
+        this.sponsorRepository = sponsorRepository;
+    }
 
     @PostConstruct
     public void init() {

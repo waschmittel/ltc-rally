@@ -1,11 +1,5 @@
 package de.flubba.rally;
 
-import java.util.Locale;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.vaadin.teemusa.sidemenu.SideMenu;
-
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Viewport;
@@ -21,12 +15,15 @@ import com.vaadin.spring.annotation.SpringViewDisplay;
 import com.vaadin.spring.navigator.SpringNavigator;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.UI;
-
 import de.flubba.generated.i18n.I18n;
 import de.flubba.rally.view.LiveView;
 import de.flubba.rally.view.ResultsView;
 import de.flubba.rally.view.RunnerView;
 import de.flubba.rally.view.TagAssignmentsView;
+import org.springframework.beans.factory.annotation.Value;
+import org.vaadin.teemusa.sidemenu.SideMenu;
+
+import java.util.Locale;
 
 @Push
 @Theme("mytheme")
@@ -37,11 +34,14 @@ public class RallyUI extends UI {
     @Value("${server.session.timeout}")
     private Integer sessionTimeout;
 
-    @Autowired
-    private SpringViewProvider springViewProvider;
+    private final SpringViewProvider springViewProvider;
+    private final SpringNavigator springNavigator;
 
-    @Autowired
-    private SpringNavigator springNavigator;
+    public RallyUI(SpringViewProvider springViewProvider, SpringNavigator springNavigator, MySideMenu sideMenu) {
+        this.springViewProvider = springViewProvider;
+        this.springNavigator = springNavigator;
+        this.sideMenu = sideMenu;
+    }
 
     @Override
     protected void init(VaadinRequest request) {
@@ -58,8 +58,7 @@ public class RallyUI extends UI {
         VaadinSession.getCurrent().getSession().setMaxInactiveInterval(sessionTimeout);
     }
 
-    @Autowired
-    private MySideMenu sideMenu;
+    private final MySideMenu sideMenu;
 
     private void initNavigator() {
         springNavigator.addProvider(springViewProvider);
@@ -89,6 +88,6 @@ public class RallyUI extends UI {
 
     // TODO: use something more sensible than this to close entity edit windows
     public static void closeWindows() {
-        UI.getCurrent().getWindows().stream().forEach(w -> UI.getCurrent().removeWindow(w));
+        UI.getCurrent().getWindows().forEach(w -> UI.getCurrent().removeWindow(w));
     }
 }

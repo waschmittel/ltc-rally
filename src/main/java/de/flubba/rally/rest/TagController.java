@@ -1,10 +1,15 @@
 package de.flubba.rally.rest;
 
-import javax.servlet.http.HttpServletRequest;
-
+import de.flubba.rally.LapBroadcaster;
+import de.flubba.rally.entity.Lap;
+import de.flubba.rally.entity.Runner;
+import de.flubba.rally.entity.TagAssignment;
+import de.flubba.rally.entity.repository.LapRepository;
+import de.flubba.rally.entity.repository.RunnerRepository;
+import de.flubba.rally.entity.repository.TagAssignmentRepository;
+import de.flubba.rally.rest.dto.RunnerDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,14 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.flubba.rally.LapBroadcaster;
-import de.flubba.rally.entity.Lap;
-import de.flubba.rally.entity.Runner;
-import de.flubba.rally.entity.TagAssignment;
-import de.flubba.rally.entity.repository.LapRepository;
-import de.flubba.rally.entity.repository.RunnerRepository;
-import de.flubba.rally.entity.repository.TagAssignmentRepository;
-import de.flubba.rally.rest.dto.RunnerDto;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class TagController {
@@ -31,24 +29,25 @@ public class TagController {
     @Value("${de.flubba.rally.min-lap-duration}")
     private Long minimumLapDuration;
 
-    @Autowired
-    private TagAssignmentRepository tagAssignmentRepository;
+    private final TagAssignmentRepository tagAssignmentRepository;
+    private final RunnerRepository runnerRepository;
+    private final LapRepository lapRepository;
 
-    @Autowired
-    private RunnerRepository runnerRepository;
-
-    @Autowired
-    private LapRepository lapRepository;
+    public TagController(TagAssignmentRepository tagAssignmentRepository, RunnerRepository runnerRepository, LapRepository lapRepository) {
+        this.tagAssignmentRepository = tagAssignmentRepository;
+        this.runnerRepository = runnerRepository;
+        this.lapRepository = lapRepository;
+    }
 
     @ExceptionHandler(TagNotFoundException.class)
     public ResponseEntity<String> handleTagNotFound(HttpServletRequest req, Exception e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({ TagAlreadyAssignedException.class,
-                        RunnerAlreadyAssignedException.class,
-                        NoRunnerFoundException.class,
-                        LapTooShortException.class })
+    @ExceptionHandler({TagAlreadyAssignedException.class,
+            RunnerAlreadyAssignedException.class,
+            NoRunnerFoundException.class,
+            LapTooShortException.class})
     public ResponseEntity<String> handleExistingTag(HttpServletRequest req, Exception e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
     }
@@ -142,7 +141,7 @@ public class TagController {
     public String setTagAssignment(@RequestParam(defaultValue = "false") boolean overwrite,
                                    String tagId,
                                    Long runnerId) throws RunnerAlreadyAssignedException,
-                                                  TagAlreadyAssignedException {
+            TagAlreadyAssignedException {
         TagAssignment tagAssignment = new TagAssignment();
         tagAssignment.setTagId(tagId);
         tagAssignment.setRunnerId(runnerId);
@@ -173,7 +172,7 @@ public class TagController {
     }
 
     private void checkIfTagAssignmentExists(TagAssignment tagAssignment) throws RunnerAlreadyAssignedException,
-                                                                         TagAlreadyAssignedException {
+            TagAlreadyAssignedException {
         TagAssignment existingAssignment = tagAssignmentRepository.findOneByRunnerId(tagAssignment.getRunnerId());
         if (existingAssignment != null) {
             throw new RunnerAlreadyAssignedException(existingAssignment);

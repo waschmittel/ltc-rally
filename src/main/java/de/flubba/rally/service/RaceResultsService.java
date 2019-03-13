@@ -1,29 +1,30 @@
 package de.flubba.rally.service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import de.flubba.rally.entity.Lap;
 import de.flubba.rally.entity.Runner;
 import de.flubba.rally.entity.Sponsor;
 import de.flubba.rally.entity.repository.LapRepository;
 import de.flubba.rally.entity.repository.RunnerRepository;
 import de.flubba.rally.entity.repository.SponsorRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
 
 @Service
 public class RaceResultsService {
-    @Autowired
-    private RunnerRepository runnerRepository;
+    private final RunnerRepository runnerRepository;
+    private final LapRepository lapRepository;
+    private final SponsorRepository sponsorRepository;
 
     @Autowired
-    private LapRepository lapRepository;
-
-    @Autowired
-    SponsorRepository sponsorRepository;
+    public RaceResultsService(RunnerRepository runnerRepository, LapRepository lapRepository, SponsorRepository sponsorRepository) {
+        this.runnerRepository = runnerRepository;
+        this.lapRepository = lapRepository;
+        this.sponsorRepository = sponsorRepository;
+    }
 
     public void generateResults() {
         runnerRepository.findAll().forEach(runner -> {

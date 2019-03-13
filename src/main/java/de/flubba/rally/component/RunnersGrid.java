@@ -1,22 +1,18 @@
 package de.flubba.rally.component;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.vaadin.addons.ResetButtonForTextField;
-
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.components.grid.HeaderRow;
-
 import de.flubba.rally.entity.Runner;
 import de.flubba.rally.entity.repository.RunnerRepository;
+import org.vaadin.addons.ResetButtonForTextField;
+
+import javax.annotation.PostConstruct;
+import java.util.LinkedList;
+import java.util.List;
 
 @SpringComponent
 @ViewScope
@@ -27,18 +23,18 @@ public class RunnersGrid extends Grid<Runner> {
 
     private TextField runnersFilter = new TextField();
 
-    @Autowired
-    private RunnerRepository repository;
+    private final RunnerRepository repository;
 
     private List<SelectionListener> selectionListeners = new LinkedList<>();
-    private Runner                  selectedRunner     = null;
+    private Runner selectedRunner = null;
 
-    public RunnersGrid() {
+    public RunnersGrid(RunnerRepository repository) {
         super(Runner.class);
         setSizeFull();
         initColumns();
         initHeaderRow();
         initSelection();
+        this.repository = repository;
     }
 
     @PostConstruct

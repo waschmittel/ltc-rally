@@ -1,12 +1,7 @@
 package de.flubba.rally.view;
 
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
-
 import de.flubba.rally.RallyUI;
 import de.flubba.rally.component.RunnerEditForm;
 import de.flubba.rally.entity.Runner;
@@ -14,15 +9,20 @@ import de.flubba.rally.entity.repository.RunnerRepository;
 import de.flubba.rally.service.RaceResultsService;
 import de.flubba.util.vaadin.EditDeleteButtonsProvider;
 
+import javax.annotation.PostConstruct;
+
 @SpringView(name = ResultsView.VIEW_NAME)
 public class ResultsView extends ResultsViewDesign implements View {
     public static final String VIEW_NAME = "results";
 
-    @Autowired
-    private RunnerRepository runnerRepository;
+    private final RunnerRepository runnerRepository;
 
-    @Autowired
-    private RaceResultsService raceResultsService;
+    private final RaceResultsService raceResultsService;
+
+    public ResultsView(RunnerRepository runnerRepository, RaceResultsService raceResultsService) {
+        this.runnerRepository = runnerRepository;
+        this.raceResultsService = raceResultsService;
+    }
 
     @PostConstruct
     private void init() {
@@ -33,7 +33,7 @@ public class ResultsView extends ResultsViewDesign implements View {
         });
     }
 
-    public void editRunner(Runner runner) {
+    private void editRunner(Runner runner) {
         RunnerEditForm runnerEditForm = new RunnerEditForm(runner);
         runnerEditForm.showResultFields();
         runnerEditForm.openInModalPopup();

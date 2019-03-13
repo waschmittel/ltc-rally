@@ -77,9 +77,14 @@ public class RunnerView extends RunnerViewDesign implements View {
     }
 
     private void saveRunner(Runner runner) {
-        runner.setName(WordUtils.capitalizeFully(runner.getName()));
+        sanitizeInput(runner);
         runnersGrid.selectRunner(runnerRepository.saveAndFlush(runner));
         RallyUI.closeWindows();
+    }
+
+    private void sanitizeInput(Runner runner) {
+        runner.setName(capitalize(runner.getName().trim()));
+        runner.setRoomNumber(runner.getRoomNumber().trim());
     }
 
     private void confirmDeleteSponsor(Sponsor sponsor) {
@@ -105,8 +110,20 @@ public class RunnerView extends RunnerViewDesign implements View {
     }
 
     private void saveSponsor(Sponsor sponsor) {
+        sanitizeInput(sponsor);
         sponsorRepository.saveAndFlush(sponsor);
         showSponsorsFor(sponsor.getRunner());
         RallyUI.closeWindows();
+    }
+
+    private void sanitizeInput(Sponsor sponsor) {
+        sponsor.setName(capitalize(sponsor.getName().trim()));
+        sponsor.setStreet(capitalize(sponsor.getStreet().trim()));
+        sponsor.setCity(capitalize(sponsor.getCity().trim()));
+        sponsor.setCountry(capitalize(sponsor.getCountry().trim()));
+    }
+
+    private static String capitalize(String string) {
+        return WordUtils.capitalizeFully(string, ' ', '-');
     }
 }

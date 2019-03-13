@@ -31,6 +31,7 @@ public class ResultsView extends ResultsViewDesign implements View {
             raceResultsService.generateResults();
             runnersGrid.refresh();
         });
+        refreshButton.addClickListener(e -> runnersGrid.refresh());
     }
 
     private void editRunner(Runner runner) {

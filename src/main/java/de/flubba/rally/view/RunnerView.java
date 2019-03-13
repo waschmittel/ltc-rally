@@ -13,6 +13,7 @@ import de.flubba.rally.entity.repository.RunnerRepository;
 import de.flubba.rally.entity.repository.SponsorRepository;
 import de.flubba.util.vaadin.EditDeleteButtonsProvider;
 import de.flubba.util.vaadin.dialog.ConfirmDialog;
+import de.flubba.util.vaadin.dialog.ErrorDialog;
 import org.apache.commons.text.WordUtils;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -80,8 +81,12 @@ public class RunnerView extends RunnerViewDesign implements View {
 
     private void saveRunner(Runner runner) {
         sanitizeInput(runner);
-        runnersGrid.selectRunner(runnerRepository.saveAndFlush(runner));
-        RallyUI.closeWindows();
+        if (runner.getId() == null && runnerRepository.countByName(runner.getName()) > 0) {
+            new ErrorDialog(String.format("Cannot create \"%s\". There is already a runner with this name.", runner.getName()));
+        } else {
+            runnersGrid.selectRunner(runnerRepository.saveAndFlush(runner));
+            RallyUI.closeWindows();
+        }
     }
 
     private void sanitizeInput(Runner runner) {

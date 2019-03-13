@@ -27,7 +27,7 @@ public class Runner {
     private Long id;
 
     @NotNull(message = "{runner.name.required}")
-    @Column(length = 100)
+    @Column(length = 100, unique = true)
     @Size(min = 5, max = 100, message = "{runner.name.length}")
     private String name;
 

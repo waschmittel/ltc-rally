@@ -16,10 +16,10 @@ public class Lap {
     private Long id;
 
     @NotNull
-    private long time;
+    private Long time;
 
     @NotNull
-    private long duration;
+    private Long duration;
 
     @ManyToOne
     private Runner runner;

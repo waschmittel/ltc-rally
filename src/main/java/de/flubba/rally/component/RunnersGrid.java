@@ -91,9 +91,11 @@ public class RunnersGrid extends Grid<Runner> {
 
     public void refresh() {
         if (genderFilter.getValue() != null) {
-            setDataProvider(new ListDataProvider<>(repository.findByNameIgnoreCaseContainingAndGenderIs(runnersFilter.getValue(), genderFilter.getValue())));
+            setDataProvider(new ListDataProvider<>(
+                    repository.findByNameIgnoreCaseContainingAndGenderIs(runnersFilter.getValue(), genderFilter.getValue())));
         } else {
-            setDataProvider(new ListDataProvider<>(repository.findByNameIgnoreCaseContaining(runnersFilter.getValue())));
+            setDataProvider(new ListDataProvider<>(
+                    repository.findByNameIgnoreCaseContaining(runnersFilter.getValue())));
         }
         if (selectedRunner != null) {
             select(selectedRunner);

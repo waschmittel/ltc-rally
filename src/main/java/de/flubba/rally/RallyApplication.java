@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 // Jsr310JpaConverters needed to properly persist java.time.*
-@EntityScan //TODO: check about date conversion in spring boot 2.0
+@EntityScan
 @SpringBootApplication
 public class RallyApplication extends SpringBootServletInitializer {
 

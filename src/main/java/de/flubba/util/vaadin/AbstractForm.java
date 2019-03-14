@@ -287,8 +287,7 @@ public abstract class AbstractForm<T> extends CustomComponent {
     }
 
     /**
-     * @return the currently edited entity or null if the form is currently
-     * unbound
+     * @return the currently edited entity or null if the form is currently unbound
      */
     public T getEntity() {
         return entity;
@@ -299,8 +298,7 @@ public abstract class AbstractForm<T> extends CustomComponent {
     }
 
     /**
-     * @return the last Popup into which the Form was opened with
-     * #openInModalPopup method or null if the form hasn't been use in window
+     * @return the last Popup into which the Form was opened with #openInModalPopup method or null if the form hasn't been use in window
      */
     public Window getPopup() {
         return popup;

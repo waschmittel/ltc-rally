@@ -80,7 +80,7 @@ public class RunnerView extends RunnerViewDesign implements View {
     }
 
     private void saveRunner(Runner runner) {
-        sanitizeInput(runner);
+        sanitizeRunner(runner);
         if (runner.getId() == null && runnerRepository.countByName(runner.getName()) > 0) {
             new ErrorDialog(String.format("Cannot create \"%s\". There is already a runner with this name.", runner.getName()));
         } else {
@@ -89,7 +89,7 @@ public class RunnerView extends RunnerViewDesign implements View {
         }
     }
 
-    private void sanitizeInput(Runner runner) {
+    private void sanitizeRunner(Runner runner) {
         runner.setName(capitalize(runner.getName().trim()));
         runner.setRoomNumber(runner.getRoomNumber().trim());
     }
@@ -117,13 +117,13 @@ public class RunnerView extends RunnerViewDesign implements View {
     }
 
     private void saveSponsor(Sponsor sponsor) {
-        sanitizeInput(sponsor);
+        sanitizeSponsor(sponsor);
         sponsorRepository.saveAndFlush(sponsor);
         showSponsorsFor(sponsor.getRunner());
         RallyUI.closeWindows();
     }
 
-    private void sanitizeInput(Sponsor sponsor) {
+    private void sanitizeSponsor(Sponsor sponsor) {
         sponsor.setName(capitalize(sponsor.getName().trim()));
         sponsor.setStreet(capitalize(sponsor.getStreet().trim()));
         sponsor.setCity(capitalize(sponsor.getCity().trim()));

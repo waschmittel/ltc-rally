@@ -86,7 +86,6 @@ public class RallyUI extends UI {
         }
     }
 
-    // TODO: use something more sensible than this to close entity edit windows
     public static void closeWindows() {
         UI.getCurrent().getWindows().forEach(w -> UI.getCurrent().removeWindow(w));
     }

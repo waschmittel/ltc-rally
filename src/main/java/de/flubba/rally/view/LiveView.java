@@ -42,7 +42,9 @@ public class LiveView extends LiveViewDesign implements View, LapBroadcastListen
     @Override
     public void receiveBroadcast(Runner runner, long lapTime) {
         getUI().access(() -> {
-            BigDecimal seconds = new BigDecimal(lapTime).divide(new BigDecimal(1000), RoundingMode.HALF_UP).setScale(1, RoundingMode.HALF_UP);
+            BigDecimal seconds = new BigDecimal(lapTime)
+                    .divide(new BigDecimal(1000), RoundingMode.HALF_UP)
+                    .setScale(1, RoundingMode.HALF_UP);
             addRunner(String.format("%ss - %s - %s", seconds.toString(), runner.getId(), runner.getName()));
         });
     }

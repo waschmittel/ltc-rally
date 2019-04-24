@@ -31,7 +31,7 @@ import java.util.Locale;
 @SpringUI
 @Viewport("width=device-width, initial-scale=1")
 public class RallyUI extends UI {
-    @Value("${server.session.timeout}")
+    @Value("${server.servlet.session.timeout}")
     private Integer sessionTimeout;
 
     private final SpringViewProvider springViewProvider;
@@ -54,7 +54,6 @@ public class RallyUI extends UI {
     }
 
     private void setSessionTimeout() {
-        // needs to be set if the application is deployed as a WAR instead of a jar
         VaadinSession.getCurrent().getSession().setMaxInactiveInterval(sessionTimeout);
     }
 

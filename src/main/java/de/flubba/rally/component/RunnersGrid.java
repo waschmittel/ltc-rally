@@ -112,6 +112,7 @@ public class RunnersGrid extends Grid<Runner> {
         refresh();
         runnersFilter.setValue("");
         genderFilter.setValue(null);
+        select(runner);
     }
 
     public void addRunnerSelectionListener(SelectionListener selectionListener) {

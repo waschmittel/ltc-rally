@@ -7,14 +7,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { RallyApplication.class,
-                            ExceptionConfiguration.class,
-                            RallyConfiguration.class })
+@SpringBootTest(classes = {RallyApplication.class,
+        ExceptionConfiguration.class,
+        RallyConfiguration.class})
 @AutoConfigureTestDatabase
 public class RallyApplicationTests {
-
     @Test
     public void contextLoads() {
+        //just test if the context loads
     }
 
 }

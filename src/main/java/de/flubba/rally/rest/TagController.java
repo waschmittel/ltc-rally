@@ -1,10 +1,15 @@
 package de.flubba.rally.rest;
 
-import javax.servlet.http.HttpServletRequest;
-
+import de.flubba.rally.LapBroadcaster;
+import de.flubba.rally.entity.Lap;
+import de.flubba.rally.entity.Runner;
+import de.flubba.rally.entity.TagAssignment;
+import de.flubba.rally.entity.repository.LapRepository;
+import de.flubba.rally.entity.repository.RunnerRepository;
+import de.flubba.rally.entity.repository.TagAssignmentRepository;
+import de.flubba.rally.rest.dto.RunnerDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,14 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.flubba.rally.LapBroadcaster;
-import de.flubba.rally.entity.Lap;
-import de.flubba.rally.entity.Runner;
-import de.flubba.rally.entity.TagAssignment;
-import de.flubba.rally.entity.repository.LapRepository;
-import de.flubba.rally.entity.repository.RunnerRepository;
-import de.flubba.rally.entity.repository.TagAssignmentRepository;
-import de.flubba.rally.rest.dto.RunnerDto;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class TagController {
@@ -31,56 +29,57 @@ public class TagController {
     @Value("${de.flubba.rally.min-lap-duration}")
     private Long minimumLapDuration;
 
-    @Autowired
-    private TagAssignmentRepository tagAssignmentRepository;
+    private final TagAssignmentRepository tagAssignmentRepository;
+    private final RunnerRepository runnerRepository;
+    private final LapRepository lapRepository;
 
-    @Autowired
-    private RunnerRepository runnerRepository;
-
-    @Autowired
-    private LapRepository lapRepository;
+    public TagController(TagAssignmentRepository tagAssignmentRepository, RunnerRepository runnerRepository, LapRepository lapRepository) {
+        this.tagAssignmentRepository = tagAssignmentRepository;
+        this.runnerRepository = runnerRepository;
+        this.lapRepository = lapRepository;
+    }
 
     @ExceptionHandler(TagNotFoundException.class)
     public ResponseEntity<String> handleTagNotFound(HttpServletRequest req, Exception e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({ TagAlreadyAssignedException.class,
-                        RunnerAlreadyAssignedException.class,
-                        NoRunnerFoundException.class,
-                        LapTooShortException.class })
+    @ExceptionHandler({TagAlreadyAssignedException.class,
+            RunnerAlreadyAssignedException.class,
+            NoRunnerFoundException.class,
+            LapTooShortException.class})
     public ResponseEntity<String> handleExistingTag(HttpServletRequest req, Exception e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
     }
 
-    public static final class LapTooShortException extends Exception {
+    private static final class LapTooShortException extends Exception {
         private LapTooShortException(long minimumLapDuration, long duration) {
             super(String.format("Lap too short! Was only %s seconds. Minimum lap duration is %s seconds.", duration, minimumLapDuration));
         }
     }
 
-    public static final class NoRunnerFoundException extends Exception {
+    private static final class NoRunnerFoundException extends Exception {
         private NoRunnerFoundException(TagAssignment tagAssignment) {
             super(String.format("No runner with id %s found for counting laps.", tagAssignment.getRunnerId()));
             log.debug("No runner with id {} found for counting laps.", tagAssignment.getTagId());
         }
     }
 
-    public static final class TagAlreadyAssignedException extends Exception {
+    private static final class TagAlreadyAssignedException extends Exception {
         private TagAlreadyAssignedException(TagAssignment tagAssignment) {
             super(String.format("Tag %s is already assigned to runner %s.", tagAssignment.getTagId(), tagAssignment.getRunnerId()));
             log.debug("Tag {} not assigned because it is already assigned.", tagAssignment.getTagId());
         }
     }
 
-    public static final class RunnerAlreadyAssignedException extends Exception {
+    private static final class RunnerAlreadyAssignedException extends Exception {
         private RunnerAlreadyAssignedException(TagAssignment tagAssignment) {
             super(String.format("Runner %s is already assigned to tag %s.", tagAssignment.getRunnerId(), tagAssignment.getTagId()));
             log.debug("Runner {} not assigned because it is already assigned.", tagAssignment.getRunnerId());
         }
     }
 
-    public static final class TagNotFoundException extends Exception {
+    private static final class TagNotFoundException extends Exception {
         private TagNotFoundException(String tagId) {
             super(String.format("Tag %s is not registered.", tagId));
         }
@@ -97,10 +96,7 @@ public class TagController {
     }
 
     private static RunnerDto createRunnerDto(Runner runner) {
-        RunnerDto runnerDto = new RunnerDto();
-        runnerDto.id = runner.getId();
-        runnerDto.name = runner.getName();
-        return runnerDto;
+        return new RunnerDto(runner.getId(), runner.getName());
     }
 
     private void saveNewLap(Runner runner, long duration) {
@@ -145,7 +141,7 @@ public class TagController {
     public String setTagAssignment(@RequestParam(defaultValue = "false") boolean overwrite,
                                    String tagId,
                                    Long runnerId) throws RunnerAlreadyAssignedException,
-                                                  TagAlreadyAssignedException {
+            TagAlreadyAssignedException {
         TagAssignment tagAssignment = new TagAssignment();
         tagAssignment.setTagId(tagId);
         tagAssignment.setRunnerId(runnerId);
@@ -176,7 +172,7 @@ public class TagController {
     }
 
     private void checkIfTagAssignmentExists(TagAssignment tagAssignment) throws RunnerAlreadyAssignedException,
-                                                                         TagAlreadyAssignedException {
+            TagAlreadyAssignedException {
         TagAssignment existingAssignment = tagAssignmentRepository.findOneByRunnerId(tagAssignment.getRunnerId());
         if (existingAssignment != null) {
             throw new RunnerAlreadyAssignedException(existingAssignment);

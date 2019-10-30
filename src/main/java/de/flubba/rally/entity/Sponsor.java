@@ -1,6 +1,6 @@
 package de.flubba.rally.entity;
 
-import java.math.BigDecimal;
+import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +11,9 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 
+@Data
 @Entity
 public class Sponsor {
     @Id
@@ -52,99 +54,5 @@ public class Sponsor {
 
     @ManyToOne
     private Runner runner;
-
-    public String getCity() {
-        return city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public BigDecimal getOneTimeDonation() {
-        return oneTimeDonation;
-    }
-
-    public BigDecimal getPerLapDonation() {
-        return perLapDonation;
-    }
-
-    public Runner getRunner() {
-        return runner;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setOneTimeDonation(BigDecimal oneTimeDonation) {
-        this.oneTimeDonation = oneTimeDonation;
-    }
-
-    public void setPerLapDonation(BigDecimal perLapDonation) {
-        this.perLapDonation = perLapDonation;
-    }
-
-    public void setRunner(Runner runner) {
-        this.runner = runner;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public BigDecimal getTotalDonation() {
-        return totalDonation;
-    }
-
-    public void setTotalDonation(BigDecimal totalDonation) {
-        this.totalDonation = totalDonation;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (int) (id ^ (id >>> 32));
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Sponsor other = (Sponsor) obj;
-        if (id != other.id) {
-            return false;
-        }
-        return true;
-    }
 
 }

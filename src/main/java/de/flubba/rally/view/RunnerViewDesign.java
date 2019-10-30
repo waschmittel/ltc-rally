@@ -1,9 +1,5 @@
 package de.flubba.rally.view;
 
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -13,25 +9,27 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.VerticalSplitPanel;
 import com.vaadin.ui.themes.ValoTheme;
-
 import de.flubba.generated.i18n.I18n;
 import de.flubba.rally.component.RunnersGrid;
 import de.flubba.rally.entity.Sponsor;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.annotation.PostConstruct;
 
 abstract class RunnerViewDesign extends VerticalSplitPanel {
-    private HorizontalLayout runnersToolbar  = new HorizontalLayout();
-    private HorizontalLayout sponsorsToolbar = new HorizontalLayout();
+    private final HorizontalLayout runnersToolbar = new HorizontalLayout();
+    private final HorizontalLayout sponsorsToolbar = new HorizontalLayout();
 
-    private VerticalLayout runnersLayout  = new VerticalLayout();
-    private VerticalLayout sponsorsLayout = new VerticalLayout();
+    private final VerticalLayout runnersLayout = new VerticalLayout();
+    private final VerticalLayout sponsorsLayout = new VerticalLayout();
 
     @Autowired
-    RunnersGrid   runnersGrid;
-    Grid<Sponsor> sponsorsGrid = new Grid<>(Sponsor.class);
+    RunnersGrid runnersGrid;
+    final Grid<Sponsor> sponsorsGrid = new Grid<>(Sponsor.class);
 
-    Button addRunnerButton  = new Button(I18n.RUNNER_BUTTON_ADD.get(), VaadinIcons.PLUS);
-    Button refreshButton    = new Button(I18n.RUNNER_BUTTON_REFRESH.get(), VaadinIcons.REFRESH);
-    Button addSponsorButton = new Button(I18n.SPONSOR_BUTTON_ADD.get(), VaadinIcons.PLUS);
+    final Button addRunnerButton = new Button(I18n.RUNNER_BUTTON_ADD.get(), VaadinIcons.PLUS);
+    final Button refreshButton = new Button(I18n.RUNNER_BUTTON_REFRESH.get(), VaadinIcons.REFRESH);
+    final Button addSponsorButton = new Button(I18n.SPONSOR_BUTTON_ADD.get(), VaadinIcons.PLUS);
 
     @PostConstruct
     private void init() {
@@ -41,6 +39,9 @@ abstract class RunnerViewDesign extends VerticalSplitPanel {
         addStyleName(ValoTheme.SPLITPANEL_LARGE);
         setFirstComponent(runnersLayout);
         setSecondComponent(sponsorsLayout);
+
+        setMinSplitPosition(30, Unit.PERCENTAGE);
+        setMaxSplitPosition(70, Unit.PERCENTAGE);
     }
 
     private void initRunnersLayout() {

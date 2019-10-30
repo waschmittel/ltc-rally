@@ -1,26 +1,25 @@
 package de.flubba.rally.component;
 
-import java.util.EnumSet;
-
 import com.vaadin.data.converter.StringToLongConverter;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-
 import de.flubba.generated.i18n.I18n;
 import de.flubba.rally.entity.Runner;
 import de.flubba.rally.entity.Runner.Gender;
 import de.flubba.util.vaadin.AbstractForm;
 
+import java.util.EnumSet;
+
 public class RunnerEditForm extends AbstractForm<Runner> {
 
-    private TextField        id         = new TextField(I18n.RUNNER_ID.get());
-    private TextField        name       = new TextField(I18n.RUNNER_NAME.get());
-    private TextField        roomNumber = new TextField(I18n.RUNNER_ROOM.get());
-    private TextField        bonusLaps  = new TextField(I18n.RESULTS_BONUS_LAPS.get());
-    private ComboBox<Gender> gender     = new ComboBox<>(I18n.RUNNER_GENDER.get(), EnumSet.allOf(Gender.class));
+    private final TextField id = new TextField(I18n.RUNNER_ID.get());
+    private final TextField name = new TextField(I18n.RUNNER_NAME.get());
+    private final TextField roomNumber = new TextField(I18n.RUNNER_ROOM.get());
+    private final TextField bonusLaps = new TextField(I18n.RESULTS_BONUS_LAPS.get());
+    private final ComboBox<Gender> gender = new ComboBox<>(I18n.RUNNER_GENDER.get(), EnumSet.allOf(Gender.class));
 
     public RunnerEditForm(Runner runner) {
         super(Runner.class);
@@ -52,13 +51,13 @@ public class RunnerEditForm extends AbstractForm<Runner> {
     @Override
     protected void bind() {
         getBinder().forField(id)
-                   .withConverter(new StringToLongConverter("auto-generated"))
-                   .withNullRepresentation(0L)
-                   .bind("id");
+                .withConverter(new StringToLongConverter("auto-generated"))
+                .withNullRepresentation(0L)
+                .bind("id");
         getBinder().forField(bonusLaps)
-                   .withConverter(new StringToLongConverter(I18n.RESULTS_BONUS_LAPS_NON_INTEGER.get()))
-                   .withNullRepresentation(0L)
-                   .bind("bonusLaps");
+                .withConverter(new StringToLongConverter(I18n.RESULTS_BONUS_LAPS_NON_INTEGER.get()))
+                .withNullRepresentation(0L)
+                .bind("bonusLaps");
         super.bind();
     }
 

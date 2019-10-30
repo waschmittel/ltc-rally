@@ -18,8 +18,6 @@
 
 package de.flubba.util.vaadin;
 
-import java.io.Serializable;
-
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.Binder;
 import com.vaadin.icons.VaadinIcons;
@@ -34,8 +32,9 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
+import java.io.Serializable;
+
 /**
- *
  * @author mstahv
  */
 public abstract class AbstractForm<T> extends CustomComponent {
@@ -57,17 +56,17 @@ public abstract class AbstractForm<T> extends CustomComponent {
 
     private boolean settingBean;
 
-    private T                entity;
-    private SavedHandler<T>  savedHandler;
-    private ResetHandler<T>  resetHandler;
+    private T entity;
+    private SavedHandler<T> savedHandler;
+    private ResetHandler<T> resetHandler;
     private DeleteHandler<T> deleteHandler;
-    private String           modalWindowTitle = "Edit entry";
-    private String           saveCaption      = "Save";
-    private String           deleteCaption    = "Delete";
-    private String           cancelCaption    = "Cancel";
-    private Window           popup;
-    private Binder<T>        binder;
-    private boolean          hasChanges       = false;
+    private String modalWindowTitle = "Edit entry";
+    private String saveCaption = "Save";
+    private String deleteCaption = "Delete";
+    private String cancelCaption = "Cancel";
+    private Window popup;
+    private Binder<T> binder;
+    private boolean hasChanges = false;
 
     private Button saveButton;
 
@@ -87,7 +86,7 @@ public abstract class AbstractForm<T> extends CustomComponent {
         });
         binder = new BeanValidationBinder<>(entityType);
         binder.addValueChangeListener(e -> {
-            // binder.hasChanges is not really usefull so track it manually
+            // binder.hasChanges is not really useful so track it manually
             if (!settingBean) {
                 hasChanges = true;
             }
@@ -196,7 +195,6 @@ public abstract class AbstractForm<T> extends CustomComponent {
      * </pre>
      *
      * @return the content of the form
-     *
      */
     protected abstract Component createContent();
 
@@ -289,8 +287,7 @@ public abstract class AbstractForm<T> extends CustomComponent {
     }
 
     /**
-     * @return the currently edited entity or null if the form is currently
-     *         unbound
+     * @return the currently edited entity or null if the form is currently unbound
      */
     public T getEntity() {
         return entity;
@@ -301,9 +298,7 @@ public abstract class AbstractForm<T> extends CustomComponent {
     }
 
     /**
-     *
-     * @return the last Popup into which the Form was opened with
-     *         #openInModalPopup method or null if the form hasn't been use in window
+     * @return the last Popup into which the Form was opened with #openInModalPopup method or null if the form hasn't been use in window
      */
     public Window getPopup() {
         return popup;
@@ -340,8 +335,8 @@ public abstract class AbstractForm<T> extends CustomComponent {
      */
     public HorizontalLayout getToolbar() {
         return new HorizontalLayout(getSaveButton(),
-                                    getResetButton(),
-                                    getDeleteButton());
+                getResetButton(),
+                getDeleteButton());
     }
 
     /**
@@ -410,14 +405,13 @@ public abstract class AbstractForm<T> extends CustomComponent {
      */
     public void setEntity(T entity) {
         this.entity = entity;
-        this.settingBean = true;
+        settingBean = true;
         lazyInit();
         if (entity != null) {
             binder.setBean(entity);
             hasChanges = false;
             setVisible(true);
-        }
-        else {
+        } else {
             binder.setBean(null);
             hasChanges = false;
             setVisible(false);
@@ -448,7 +442,7 @@ public abstract class AbstractForm<T> extends CustomComponent {
     }
 
     public void setSaveButton(Button button) {
-        this.saveButton = button;
+        saveButton = button;
         saveButton.addClickListener(new Button.ClickListener() {
 
             private static final long serialVersionUID = -2058398434893034442L;

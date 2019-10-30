@@ -68,7 +68,7 @@ public class RaceResultsService {
         BigDecimal allLaps = new BigDecimal(runner.getNumberOfLapsRun() + bonusLaps);
         BigDecimal perLapDonation = sponsor.getPerLapDonation();
 
-        return allLaps.multiply(Optional.of(perLapDonation).orElse(BigDecimal.ZERO));
+        return allLaps.multiply(Optional.ofNullable(perLapDonation).orElse(BigDecimal.ZERO));
     }
 
     private void calculateAverage(Runner runner) {
